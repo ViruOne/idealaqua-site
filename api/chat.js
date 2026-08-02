@@ -3,17 +3,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // To'g'ridan-to'g'ri to'g'ri ishlaydigan API kalitingizni shu yerga yozamiz
-  const apiKey = "AQ.Ab8RN6LKE66NU3EZlk8xsRS6uHWQlmhtnV8DIYWVGDUcgxshuw"; // Google AI Studio'dan olingan aniq kalitingiz
-
+  const apiKey = "AQ.Ab8RN6LKE66NU3EZlk8xsRS6uHWQlmhtnV8DIYWVGDUcgxshuw"; 
   const { contents, systemInstruction } = req.body;
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey 
+        },
         body: JSON.stringify({
           systemInstruction,
           contents,
