@@ -1277,3 +1277,24 @@ footer {
     .hero p { font-size: 0.8rem; }
     .about-stats { grid-template-columns: 1fr; }
 }
+
+/* Kompyuter ekranida bu tugmani menyu ichida yashiramiz */
+.mobile-only-btn {
+    display: none;
+}
+
+/* Mobil ekranda (768px va undan kichik) ko'rsatamiz */
+@media (max-width: 768px) {
+    .mobile-only-btn {
+        display: block;
+        margin-top: 15px;
+        width: 80%;
+        text-align: center;
+    }
+
+    .mobile-only-btn .btn-primary {
+        display: inline-block !important;
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
