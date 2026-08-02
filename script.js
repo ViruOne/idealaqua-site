@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         function addMessage(text, type) {
             const messageDiv = document.createElement('div');
-            const messageId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            const messageId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
             messageDiv.id = messageId;
             messageDiv.className = `message ${type}`;
             messageDiv.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
@@ -364,10 +364,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const el = document.getElementById(id);
             if (el) {
                 const p = el.querySelector('p');
-                if (p) p.textContent = text;
-                else el.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
-            } else {
-                addMessage(text, 'bot');
+                if (p) {
+                    p.textContent = text;
+                }
             }
         }
         
