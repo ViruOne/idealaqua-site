@@ -332,39 +332,89 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Chat widget
+    // ==================== AI CHAT WIDGET (GROQ API) ====================
     const chatToggle = document.getElementById('chatToggle');
     const chatWidget = document.getElementById('chatWidget');
     const chatClose = document.querySelector('.chat-close');
     const chatSendBtn = document.getElementById('chatSendBtn');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
-    
+
+    const systemInstruction = "Siz IDEAL AQUA AI muhandis-yordamchisisiz. Sug'orish tizimlari, quvurlar, nasoslar va loyihalash bo'yicha yordam berasiz.";
+    let contents = [];
+
     if (chatToggle && chatWidget) {
         chatToggle.addEventListener('click', () => chatWidget.classList.toggle('active'));
         if (chatClose) chatClose.addEventListener('click', () => chatWidget.classList.remove('active'));
         
+        // Ekranga xabar qo'shish (har safar yangi element yaratiladi)
         function addMessage(text, type) {
             const messageDiv = document.createElement('div');
+            const messageId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            messageDiv.id = messageId;
             messageDiv.className = `message ${type}`;
             messageDiv.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            if (chatMessages) {
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            return messageId;
         }
-        
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (message) {
-                addMessage(message, 'user');
-                chatInput.value = '';
-                setTimeout(() => {
-                    addMessage('Rahmat! Mutaxassislarimiz tez orada bog\'lanadi.', 'bot');
-                }, 500);
+
+        // Yuklanmoqda xabarini yangilash
+        function updateMessage(id, text) {
+            const el = document.getElementById(id);
+            if (el) {
+                const p = el.querySelector('p');
+                if (p) p.textContent = text;
+                else el.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
+            } else {
+                addMessage(text, 'bot');
             }
         }
         
-        if (chatSendBtn) chatSendBtn.addEventListener('click', sendMessage);
-        if (chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        async function sendAiMessage() {
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+
+            // 1. Foydalanuvchi xabari
+            addMessage(userText, 'user');
+            contents.push({ role: 'user', parts: [{ text: userText }] });
+            chatInput.value = '';
+
+            // 2. Yuklanmoqda xabari
+            const loadingId = addMessage('Javob tayyorlanmoqda...', 'bot');
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents, systemInstruction })
+                });
+
+                const data = await response.json();
+
+                if (data.candidates && data.candidates[0]) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    updateMessage(loadingId, replyText);
+                    contents.push({ role: 'model', parts: [{ text: replyText }] });
+                } else if (data.error) {
+                    updateMessage(loadingId, `Xatolik: ${data.error}`);
+                } else {
+                    updateMessage(loadingId, 'Kutilmagan xatolik yuz berdi.');
+                }
+            } catch (error) {
+                updateMessage(loadingId, 'Server bilan aloqa uzildi.');
+            }
+        }
+        
+        if (chatSendBtn) chatSendBtn.addEventListener('click', sendAiMessage);
+        if (chatInput) chatInput.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendAiMessage();
+            } 
+        });
     }
     
     // Smooth scroll
@@ -383,28 +433,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Video background with error handling
     const heroVideo = document.getElementById('heroVideo');
     if (heroVideo) {
-        // Try to play video
         const playVideo = () => {
             heroVideo.play().catch(e => {
-                console.log('Video autoplay failed, trying muted...');
                 heroVideo.muted = true;
                 heroVideo.play().catch(err => {
-                    console.log('Video still cannot play, using fallback');
                     heroVideo.style.display = 'none';
                 });
             });
         };
-        
-        // Check if video can play
         heroVideo.addEventListener('canplay', playVideo);
-        
-        // If video fails to load
         heroVideo.addEventListener('error', () => {
-            console.log('Video failed to load, using fallback');
             heroVideo.style.display = 'none';
         });
-        
-        // Try to play immediately
         playVideo();
     }
     
@@ -428,12 +468,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ==================== MOBILE DETECTION & OPTIMIZATION ====================
 
-// Mobil qurilmani aniqlash
 function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 }
 
-// Mobil qurilmada AOS ni soddalashtirish
 if (isMobile()) {
     if (typeof AOS !== 'undefined') {
         AOS.init({
@@ -449,7 +487,6 @@ if (isMobile()) {
     }
 }
 
-// Mobil qurilmada touch event lar uchun optimizatsiya
 if (isMobile()) {
     document.querySelectorAll('.card, .btn-primary, .btn-secondary, .faq-question').forEach(el => {
         el.addEventListener('touchstart', function() {
@@ -462,7 +499,6 @@ if (isMobile()) {
     });
 }
 
-// Mobil qurilmada video autoplay ni optimallashtirish
 if (isMobile()) {
     const heroVideo = document.getElementById('heroVideo');
     if (heroVideo) {
@@ -471,7 +507,6 @@ if (isMobile()) {
     }
 }
 
-// Ekran o'lchami o'zgarganda AOS ni yangilash
 window.addEventListener('resize', () => {
     if (typeof AOS !== 'undefined') {
         AOS.refresh();
