@@ -1285,12 +1285,13 @@ footer {
 
 /* Mobil ekranda (768px va undan kichik) ko'rsatamiz */
 @media (max-width: 768px) {
-    .mobile-only-btn {
-        display: block;
-        margin-top: 15px;
-        width: 80%;
-        text-align: center;
+    .header-actions .btn-primary {
+        display: inline-flex !important;
+        padding: 6px 12px;
+        font-size: 11px;
+        border-radius: 20px;
     }
+}
 
     .mobile-only-btn .btn-primary {
         display: inline-block !important;
