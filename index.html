@@ -699,36 +699,19 @@
 </div>
 
 <script>
-  // GEMINI API VA SISTERM PROMPT SOZLAMALARI
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  // Serverless backend funksiyamizga ulanamiz
+  const CHAT_API_URL = '/api/chat';
 
-  const SYSTEM_INSTRUCTION = `
-Siz — IDEAL AQUA LLC (https://idealaqua.uz) kompaniyasining AI muhandis-konsultantisiz.
-
-MAQSAD VA VAZIFA:
-- Sug'orish tizimlari (tomchilatib, yomg'irlatib), PE va PVC quvurlar, fittinglar, filtratsiya hamda nasos stansiyalari bo'yicha professional muhandislik maslahati berish.
-- Foydalanuvchiga xushmuomala va aniq o'zbek tilida (ruscha/inglizcha so'ralsa o'sha tilda) javob bering.
-
-SOHAVIY BILIMLAR BAZASI:
-- PE quvurlar: PE100 / PE80 yuqori bosimli (6-16 bar), diametri 20mm dan 200mm gacha.
-- Tomchilatib sug'orish: Qatorlar orasiga qarab 1.6 - 2.2 l/h tomizgichlar, bosim 1.5 - 2.5 bar.
-- Katalog va do'kon uchun mijozni https://shop.idealaqua.uz saytiga yo'naltiring.
-
-QO'SHIMCHA YO'NALTIRISH:
-- Aniq loyiha smetasi yoki narxlar hisobi so'ralsa, mijozdan telefon raqamini qoldirishni so'rang, mutaxassis bog'lanadi.
-`;
+  const SYSTEM_INSTRUCTION = {
+    parts: [{
+      text: `Siz — IDEAL AQUA LLC (https://idealaqua.uz) kompaniyasining AI muhandis-konsultantisiz.
+Sizning vazifangiz: Tomchilatib va yomg'irlatib sug'orish tizimlari, PE va PVC quvurlar, fittinglar hamda nasoslar bo'yicha professional muhandislik maslahati berish.
+Javoblarni xushmuomala, professional va aniq o'zbek tilida bering. 
+Katalog va do'kon uchun mijozni https://shop.idealaqua.uz saytiga yo'naltiring. Aniq loyiha va smeta so'ralsa telefon raqam qoldirishni so'rang.`
+    }]
+  };
 
   let chatHistory = [];
-
-  function toggleAIChat() {
-    const box = document.getElementById("ai-chat-box");
-    box.style.display = (box.style.display === "flex") ? "none" : "flex";
-  }
-
-  function handleKeyPress(e) {
-    if (e.key === 'Enter') sendAIMessage();
-  }
 
   async function sendAIMessage() {
     const input = document.getElementById("ai-chat-input");
@@ -737,7 +720,7 @@ QO'SHIMCHA YO'NALTIRISH:
 
     const msgContainer = document.getElementById("ai-chat-messages");
 
-    // Foydalanuvchi xabarini ekranga chiqarish
+    // User xabari
     const userMsgDiv = document.createElement("div");
     userMsgDiv.className = "msg msg-user";
     userMsgDiv.innerText = userText;
@@ -746,7 +729,7 @@ QO'SHIMCHA YO'NALTIRISH:
     input.value = "";
     msgContainer.scrollTop = msgContainer.scrollHeight;
 
-    // AI yuklanmoqda ko'rsatkichi
+    // Loading status
     const loadingDiv = document.createElement("div");
     loadingDiv.className = "msg msg-ai";
     loadingDiv.id = "ai-loading";
@@ -754,20 +737,16 @@ QO'SHIMCHA YO'NALTIRISH:
     msgContainer.appendChild(loadingDiv);
     msgContainer.scrollTop = msgContainer.scrollHeight;
 
-    // Suhbat tarixini saqlash
     chatHistory.push({ role: "user", parts: [{ text: userText }] });
 
     try {
-      const response = await fetch(GEMINI_API_URL, {
+      // Vercel Serverless Function'ga so'rov yuboramiz
+      const response = await fetch(CHAT_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-          contents: chatHistory,
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 600
-          }
+          systemInstruction: SYSTEM_INSTRUCTION,
+          contents: chatHistory
         })
       });
 
@@ -777,11 +756,9 @@ QO'SHIMCHA YO'NALTIRISH:
       if (data.candidates && data.candidates[0].content.parts[0].text) {
         const aiReply = data.candidates[0].content.parts[0].text;
         loadingEl.innerText = aiReply;
-        
-        // AI javobini tarixga qo'shish
         chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
       } else {
-        loadingEl.innerText = "Kechirasiz, javob olishda xatolik yuz berdi.";
+        loadingEl.innerText = "Kechirasiz, javob shakllantirishda xatolik bo'ldi.";
       }
     } catch (err) {
       console.error(err);
