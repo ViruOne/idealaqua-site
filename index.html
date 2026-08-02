@@ -720,57 +720,69 @@ Katalog va do'kon uchun mijozni https://shop.idealaqua.uz saytiga yo'naltiring. 
   let chatHistory = [];
 
   async function sendAIMessage() {
-    const input = document.getElementById("ai-chat-input");
-    const userText = input.value.trim();
-    if (!userText) return;
+  const input = document.getElementById("ai-chat-input");
+  const userText = input.value.trim();
+  if (!userText) return;
 
-    const msgContainer = document.getElementById("ai-chat-messages");
+  const msgContainer = document.getElementById("ai-chat-messages");
 
-    const userMsgDiv = document.createElement("div");
-    userMsgDiv.className = "msg msg-user";
-    userMsgDiv.innerText = userText;
-    msgContainer.appendChild(userMsgDiv);
+  // User xabarini chiqarish
+  const userMsgDiv = document.createElement("div");
+  userMsgDiv.className = "msg msg-user";
+  userMsgDiv.innerText = userText;
+  msgContainer.appendChild(userMsgDiv);
 
-    input.value = "";
-    msgContainer.scrollTop = msgContainer.scrollHeight;
+  input.value = "";
+  msgContainer.scrollTop = msgContainer.scrollHeight;
 
-    const loadingDiv = document.createElement("div");
-    loadingDiv.className = "msg msg-ai";
-    loadingDiv.id = "ai-loading";
-    loadingDiv.innerText = "Javob tayyorlanmoqda...";
-    msgContainer.appendChild(loadingDiv);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
+  // Loading indicator
+  const loadingDiv = document.createElement("div");
+  loadingDiv.className = "msg msg-ai";
+  loadingDiv.id = "ai-loading";
+  loadingDiv.innerText = "Javob tayyorlanmoqda...";
+  msgContainer.appendChild(loadingDiv);
+  msgContainer.scrollTop = msgContainer.scrollHeight;
 
-    chatHistory.push({ role: "user", parts: [{ text: userText }] });
+  chatHistory.push({ role: "user", parts: [{ text: userText }] });
 
-    try {
-      const response = await fetch(CHAT_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: SYSTEM_INSTRUCTION,
-          contents: chatHistory
-        })
-      });
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: SYSTEM_INSTRUCTION,
+        contents: chatHistory
+      })
+    });
 
-      const data = await response.json();
-      const loadingEl = document.getElementById("ai-loading");
+    const data = await response.json();
+    const loadingEl = document.getElementById("ai-loading");
 
-      if (data.candidates && data.candidates[0].content.parts[0].text) {
-        const aiReply = data.candidates[0].content.parts[0].text;
-        loadingEl.innerText = aiReply;
-        chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
-      } else {
-        loadingEl.innerText = "Kechirasiz, javob shakllantirishda xatolik bo'ldi.";
-      }
-    } catch (err) {
-      console.error(err);
-      const loadingEl = document.getElementById("ai-loading");
-      if(loadingEl) loadingEl.innerText = "Aloqa xatosi. Qayta urinib ko'ring.";
+    // Gemini API qaytargan javob matnini aniq ajratib olish
+    let aiReply = "";
+    if (data && data.candidates && data.candidates[0] && data.candidates[0].content) {
+      aiReply = data.candidates[0].content.parts[0].text;
+    } else if (data.error) {
+      aiReply = "Xatolik: " + (data.error.message || JSON.stringify(data.error));
+    } else {
+      aiReply = "Noma'lum javob formati olindi.";
     }
 
-    msgContainer.scrollTop = msgContainer.scrollHeight;
+    if (loadingEl) {
+      loadingEl.innerText = aiReply;
+      // Faqat muvaffaqiyatli javob bo'lsa tarixga qo'shamiz
+      if (data.candidates) {
+        chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
+      }
+    }
+  } catch (err) {
+    console.error("Chat Error:", err);
+    const loadingEl = document.getElementById("ai-loading");
+    if (loadingEl) loadingEl.innerText = "Aloqa xatosi. Qayta urinib ko'ring.";
   }
+
+  msgContainer.scrollTop = msgContainer.scrollHeight;
+}
 </script>
 <!-- ================= END IDEAL AQUA AI CHAT ================= -->
 
