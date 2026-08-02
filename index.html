@@ -2,21 +2,22 @@
 <html lang="uz" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="description" content="IDEAL AQUA - qishloq xo'jaligi va landshaft uchun AI asosidagi aqlli sug'orish tizimlari">
     <title>IDEAL AQUA | AI-Powered Smart Irrigation Systems</title>
+    
     <!-- Google analytics  -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ELX9XE15X0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELX9XE15X0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-ELX9XE15X0');
-</script>
+      gtag('config', 'G-ELX9XE15X0');
+    </script>
+    
     <!-- Google reklama -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2172335594443861"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2172335594443861" crossorigin="anonymous"></script>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -48,14 +49,12 @@
     <header id="header">
         <div class="container header-container">
             <div class="logo-wrapper">
-                <div class="logo">
+                <a href="#home" class="logo">
                     <img src="5.png" alt="IDEAL AQUA" class="logo-img">
-                    
-                </div>
-                
+                </a>
             </div>
             
-            <button class="menu-toggle" id="menuToggle">
+            <button class="menu-toggle" id="menuToggle" aria-label="Menyuni ochish">
                 <i class="fas fa-bars"></i>
             </button>
             
@@ -116,33 +115,33 @@
                     <span class="stat-label">Texnik yordam</span>
                 </div>
             </div>
-        </div>
-        
-        <!-- Weather Widget -->
-        <div class="weather-widget" id="weatherWidget">
-            <div class="weather-city-selector">
-                <select id="citySelect" class="city-select">
-                    <option value="41.2995,69.2401">🌍 Toshkent</option>
-                    <option value="39.6542,66.9597">🌍 Samarqand</option>
-                    <option value="39.7747,64.4286">🌍 Buxoro</option>
-                    <option value="41.3783,60.3640">🌍 Xiva</option>
-                    <option value="40.3842,71.7843">🌍 Farg'ona</option>
-                    <option value="40.7821,72.3442">🌍 Andijon</option>
-                    <option value="40.9983,71.6726">🌍 Namangan</option>
-                    <option value="38.8606,65.7891">🌍 Qarshi</option>
-                    <option value="37.2242,67.2784">🌍 Termiz</option>
-                    <option value="42.4533,59.6103">🌍 Nukus</option>
-                </select>
-                <i class="fas fa-map-marker-alt"></i>
-            </div>
-            <i class="fas fa-cloud-sun" id="weatherIcon"></i>
-            <div class="weather-info">
-                <span class="temp" id="weatherTemp">--°C</span>
-                <span class="condition" id="weatherCondition">Yuklanmoqda...</span>
-            </div>
-            <div class="irrigation-recommendation" id="irrigationRecommendation">
-                <i class="fas fa-tint"></i>
-                <span>Sug'orish tavsiyasi: --</span>
+
+            <!-- Weather Widget -->
+            <div class="weather-widget" id="weatherWidget">
+                <div class="weather-city-selector">
+                    <select id="citySelect" class="city-select">
+                        <option value="41.2995,69.2401">🌍 Toshkent</option>
+                        <option value="39.6542,66.9597">🌍 Samarqand</option>
+                        <option value="39.7747,64.4286">🌍 Buxoro</option>
+                        <option value="41.3783,60.3640">🌍 Xiva</option>
+                        <option value="40.3842,71.7843">🌍 Farg'ona</option>
+                        <option value="40.7821,72.3442">🌍 Andijon</option>
+                        <option value="40.9983,71.6726">🌍 Namangan</option>
+                        <option value="38.8606,65.7891">🌍 Qarshi</option>
+                        <option value="37.2242,67.2784">🌍 Termiz</option>
+                        <option value="42.4533,59.6103">🌍 Nukus</option>
+                    </select>
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <i class="fas fa-cloud-sun" id="weatherIcon"></i>
+                <div class="weather-info">
+                    <span class="temp" id="weatherTemp">--°C</span>
+                    <span class="condition" id="weatherCondition">Yuklanmoqda...</span>
+                </div>
+                <div class="irrigation-recommendation" id="irrigationRecommendation">
+                    <i class="fas fa-tint"></i>
+                    <span>Sug'orish tavsiyasi: --</span>
+                </div>
             </div>
         </div>
     </section>
@@ -229,8 +228,10 @@
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                             <span>(124 ta sharh)</span>
                         </div>
-                        <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
-                        <button class="compare-btn" data-product="drip">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        <div class="card-actions">
+                            <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
+                            <button class="compare-btn" data-product="drip">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        </div>
                     </div>
                 </div>
                 
@@ -251,8 +252,10 @@
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                             <span>(89 ta sharh)</span>
                         </div>
-                        <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
-                        <button class="compare-btn" data-product="sensor">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        <div class="card-actions">
+                            <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
+                            <button class="compare-btn" data-product="sensor">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        </div>
                     </div>
                 </div>
                 
@@ -273,8 +276,10 @@
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                             <span>(67 ta sharh)</span>
                         </div>
-                        <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
-                        <button class="compare-btn" data-product="filter">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        <div class="card-actions">
+                            <a href="#contact" class="card-link">Batafsil <i class="fas fa-arrow-right"></i></a>
+                            <button class="compare-btn" data-product="filter">Solishtirish <i class="fas fa-chart-line"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -293,7 +298,7 @@
                 <div class="calculator-form">
                     <div class="calc-group">
                         <label><i class="fas fa-vector-square"></i> Maydon hajmi (gektar):</label>
-                        <input type="number" id="area" placeholder="Masalan: 1" step="0.1">
+                        <input type="number" id="area" placeholder="Masalan: 1" step="0.1" inputmode="decimal">
                     </div>
                     <div class="calc-group">
                         <label><i class="fas fa-tint"></i> Sug'orish turi:</label>
@@ -332,21 +337,28 @@
             <div class="price-table-wrapper" data-aos="zoom-in">
                 <table class="price-table">
                     <thead>
-                        <tr><th>Xizmat / Mahsulot</th><th>Tavsif</th><th>Narxi</th>   </tr>
+                        <tr>
+                            <th>Xizmat / Mahsulot</th>
+                            <th>Tavsif</th>
+                            <th>Narxi</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="fw-600"><i class="fas fa-drafting-compass"></i> AI Loyiha chizish</td>
-                        <td>Drone yordamida hududni o'lchash + AI optimizatsiya</td>
-                        <td class="price-cell">500 000 so'mdan</td>
-                    </tr>
-                    <tr><td class="fw-600"><i class="fas fa-seedling"></i> AI Tomchilatib sug'orish</td>
-                        <td>IoT datchiklar + AI boshqaruv (1 gektar)</td>
-                        <td class="price-cell">25 000 000 so'mdan</td>
-                    </tr>
-                    <tr><td class="fw-600"><i class="fas fa-microchip"></i> IoT Sensor to'plami</td>
-                        <td>5 ta sensor + hub + mobil app</td>
-                        <td class="price-cell">5 500 000 so'm</td>
-                    </tr>
+                        <tr>
+                            <td class="fw-600"><i class="fas fa-drafting-compass"></i> AI Loyiha chizish</td>
+                            <td>Drone yordamida hududni o'lchash + AI optimizatsiya</td>
+                            <td class="price-cell">500 000 so'mdan</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-600"><i class="fas fa-seedling"></i> AI Tomchilatib sug'orish</td>
+                            <td>IoT datchiklar + AI boshqaruv (1 gektar)</td>
+                            <td class="price-cell">25 000 000 so'mdan</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-600"><i class="fas fa-microchip"></i> IoT Sensor to'plami</td>
+                            <td>5 ta sensor + hub + mobil app</td>
+                            <td class="price-cell">5 500 000 so'm</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -407,9 +419,9 @@
                     </div>
                     
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-telegram"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                     </div>
                 </div>
                 
@@ -421,7 +433,7 @@
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-phone"></i> Telefon raqamingiz</label>
-                            <input type="tel" name="phone" placeholder="+998 (__) ___-__-__" required>
+                            <input type="tel" name="phone" placeholder="+998 (__) ___-__-__" required inputmode="tel">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-cog"></i> Xizmat turi</label>
@@ -443,7 +455,7 @@
         <div class="map-container">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1277.6882328576314!2d71.75295554353501!3d40.389532198427666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bb9d854fb35f19%3A0xef7e51171b0cbf01!2sFargona%20Fuqaro%20Loyiha%20servis!5e0!3m2!1sen!2s!4v1774112584681!5m2!1sen!2s" 
                 width="100%" 
-                height="450" 
+                height="400" 
                 style="border:0;" 
                 allowfullscreen="" 
                 loading="lazy" 
@@ -472,7 +484,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-about">
-                    <div class="logo">BIZNING<span>HAMKOR</span></div>
+                    <div class="logo">BIZNING <span>HAMKOR</span></div>
                     <div class="partner-logo">
                         <img src="4.png" alt="SUGORISH DUNYOSI" class="footer-partner-img">
                     </div>
@@ -493,7 +505,6 @@
                         <li><i class="fas fa-clock"></i> Shanba: 10:00 - 15:00</li>
                     </ul>
                 </div>
-                
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2024 IDEAL AQUA. Barcha huquqlar himoyalangan.</p>
@@ -504,22 +515,24 @@
     <!-- Back to Top -->
     <div class="back-to-top" id="backToTop">
         <div class="progress-ring">
-            <svg width="50" height="50">
-                <circle cx="25" cy="25" r="22" fill="none" stroke="rgba(0,180,216,0.2)" stroke-width="3"/>
-                <circle cx="25" cy="25" r="22" fill="none" stroke="#00b4d8" stroke-width="3" id="progressCircle" stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
+            <svg width="45" height="45">
+                <circle cx="22.5" cy="22.5" r="20" fill="none" stroke="rgba(0,180,216,0.2)" stroke-width="3"/>
+                <circle cx="22.5" cy="22.5" r="20" fill="none" stroke="#00b4d8" stroke-width="3" id="progressCircle" stroke-dasharray="125.6" stroke-dashoffset="125.6"/>
             </svg>
             <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
     <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Mavzuni o'zgartirish"><i class="fas fa-moon"></i></button>
 
     <!-- AI Chatbot -->
     <div class="chat-widget" id="chatWidget">
         <div class="chat-header">
-            <i class="fas fa-robot"></i>
-            <span>AI Assistant</span>
+            <div class="chat-title">
+                <i class="fas fa-robot"></i>
+                <span>AI Assistant</span>
+            </div>
             <button class="chat-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="chat-messages" id="chatMessages">
@@ -532,7 +545,7 @@
             <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-    <button class="chat-toggle" id="chatToggle"><i class="fas fa-comment-dots"></i><span class="chat-badge">AI</span></button>
+    <button class="chat-toggle" id="chatToggle" aria-label="Chatni ochish"><i class="fas fa-comment-dots"></i><span class="chat-badge">AI</span></button>
 
     <!-- Cookie Consent -->
     <div class="cookie-consent" id="cookieConsent">
