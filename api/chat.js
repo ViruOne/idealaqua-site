@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   // To'g'ridan-to'g'ri to'g'ri ishlaydigan API kalitingizni shu yerga yozamiz
-  const apiKey = "AQ.Ab8RN6I27iiqFlWXw4TLCLGfpxrvLiSC6RydpqbMn5rmoA_a5Q"; // Google AI Studio'dan olingan aniq kalitingiz
+  const apiKey = "AQ.Ab8RN6LKE66NU3EZlk8xsRS6uHWQlmhtnV8DIYWVGDUcgxshuw"; // Google AI Studio'dan olingan aniq kalitingiz
 
   const { contents, systemInstruction } = req.body;
 
