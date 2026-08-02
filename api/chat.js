@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = "AIzaSyCnEbYsIXxBq2JypmeGwI-7BiND1gKAm00"; 
+  const apiKey = "AIzaSyCiqEI33gQjfM9UeJqOTLT5mENNIPqh3Y8"; 
   const { contents, systemInstruction } = req.body;
 
   try {
