@@ -565,5 +565,254 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
     <script src="main.js"></script>
+
+
+    <!-- ================= IDEAL AQUA AI CHAT WIDGET ================= -->
+<style>
+  #ai-chat-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #0284c7);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+  }
+  #ai-chat-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 30px rgba(6, 182, 212, 0.6);
+  }
+  #ai-chat-box {
+    position: fixed;
+    bottom: 95px;
+    right: 24px;
+    z-index: 9999;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    max-height: calc(100vh - 120px);
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  #ai-chat-header {
+    background: #1e293b;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #334155;
+  }
+  .ai-status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  #ai-chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .msg-ai {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+    border: 1px solid #334155;
+  }
+  .msg-user {
+    background: linear-gradient(135deg, #06b6d4, #0284c7);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  #ai-chat-input-area {
+    padding: 12px;
+    background-color: #0f172a;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    gap: 8px;
+  }
+  #ai-chat-input {
+    flex: 1;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    outline: none;
+  }
+  #ai-chat-input:focus {
+    border-color: #06b6d4;
+  }
+  #ai-send-btn {
+    background: #06b6d4;
+    color: white;
+    border: none;
+    padding: 0 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+  #ai-send-btn:hover {
+    background: #0284c7;
+  }
+</style>
+
+<!-- CHAT TUGMASI VA OYNASI -->
+<button id="ai-chat-btn" onclick="toggleAIChat()">💬</button>
+
+<div id="ai-chat-box">
+  <div id="ai-chat-header">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: #06b6d4; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">IA</div>
+      <div>
+        <div style="color: white; font-weight: bold; font-size: 14px;">IDEAL AQUA AI</div>
+        <div style="color: #94a3b8; font-size: 11px;"><span class="ai-status-dot"></span>Muhandis-Konsultant</div>
+      </div>
+    </div>
+    <button onclick="toggleAIChat()" style="background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✕</button>
+  </div>
+
+  <div id="ai-chat-messages">
+    <div class="msg msg-ai">
+      Assalomu alaykum! Men IDEAL AQUA AI muhandis-yordamchisiman. Sug'orish tizimlari, quvurlar, nasoslar va loyihalash bo'yicha qanday yordam bera olaman?
+    </div>
+  </div>
+
+  <div id="ai-chat-input-area">
+    <input type="text" id="ai-chat-input" placeholder="Savolingizni yozing..." onkeypress="handleKeyPress(event)">
+    <button id="ai-send-btn" onclick="sendAIMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+  // GEMINI API VA SISTERM PROMPT SOZLAMALARI
+  const GEMINI_API_KEY = "AQ.Ab8RN6I27iiqFlWXw4TLCLGfpxrvLiSC6RydpqbMn5rmoA_a5Q";
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+  const SYSTEM_INSTRUCTION = `
+Siz — IDEAL AQUA LLC (https://idealaqua.uz) kompaniyasining AI muhandis-konsultantisiz.
+
+MAQSAD VA VAZIFA:
+- Sug'orish tizimlari (tomchilatib, yomg'irlatib), PE va PVC quvurlar, fittinglar, filtratsiya hamda nasos stansiyalari bo'yicha professional muhandislik maslahati berish.
+- Foydalanuvchiga xushmuomala va aniq o'zbek tilida (ruscha/inglizcha so'ralsa o'sha tilda) javob bering.
+
+SOHAVIY BILIMLAR BAZASI:
+- PE quvurlar: PE100 / PE80 yuqori bosimli (6-16 bar), diametri 20mm dan 200mm gacha.
+- Tomchilatib sug'orish: Qatorlar orasiga qarab 1.6 - 2.2 l/h tomizgichlar, bosim 1.5 - 2.5 bar.
+- Katalog va do'kon uchun mijozni https://shop.idealaqua.uz saytiga yo'naltiring.
+
+QO'SHIMCHA YO'NALTIRISH:
+- Aniq loyiha smetasi yoki narxlar hisobi so'ralsa, mijozdan telefon raqamini qoldirishni so'rang, mutaxassis bog'lanadi.
+`;
+
+  let chatHistory = [];
+
+  function toggleAIChat() {
+    const box = document.getElementById("ai-chat-box");
+    box.style.display = (box.style.display === "flex") ? "none" : "flex";
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') sendAIMessage();
+  }
+
+  async function sendAIMessage() {
+    const input = document.getElementById("ai-chat-input");
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    const msgContainer = document.getElementById("ai-chat-messages");
+
+    // Foydalanuvchi xabarini ekranga chiqarish
+    const userMsgDiv = document.createElement("div");
+    userMsgDiv.className = "msg msg-user";
+    userMsgDiv.innerText = userText;
+    msgContainer.appendChild(userMsgDiv);
+
+    input.value = "";
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+
+    // AI yuklanmoqda ko'rsatkichi
+    const loadingDiv = document.createElement("div");
+    loadingDiv.className = "msg msg-ai";
+    loadingDiv.id = "ai-loading";
+    loadingDiv.innerText = "Javob tayyorlanmoqda...";
+    msgContainer.appendChild(loadingDiv);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+
+    // Suhbat tarixini saqlash
+    chatHistory.push({ role: "user", parts: [{ text: userText }] });
+
+    try {
+      const response = await fetch(GEMINI_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+          contents: chatHistory,
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 600
+          }
+        })
+      });
+
+      const data = await response.json();
+      const loadingEl = document.getElementById("ai-loading");
+
+      if (data.candidates && data.candidates[0].content.parts[0].text) {
+        const aiReply = data.candidates[0].content.parts[0].text;
+        loadingEl.innerText = aiReply;
+        
+        // AI javobini tarixga qo'shish
+        chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
+      } else {
+        loadingEl.innerText = "Kechirasiz, javob olishda xatolik yuz berdi.";
+      }
+    } catch (err) {
+      console.error(err);
+      const loadingEl = document.getElementById("ai-loading");
+      if(loadingEl) loadingEl.innerText = "Aloqa xatosi. Qayta urinib ko'ring.";
+    }
+
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+</script>
+<!-- ================= END IDEAL AQUA AI CHAT ================= -->
+
+    
 </body>
 </html>
