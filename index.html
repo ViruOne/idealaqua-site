@@ -425,27 +425,33 @@
                     </div>
                 </div>
                 
-                <div class="contact-form-wrapper" data-aos="fade-left">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> To'liq ismingiz</label>
-                            <input type="text" name="name" placeholder="Ismingizni kiriting" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-phone"></i> Telefon raqamingiz</label>
-                            <input type="tel" name="phone" placeholder="+998 (__) ___-__-__" required inputmode="tel">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-cog"></i> Xizmat turi</label>
-                            <select name="service" required>
-                                <option value="" disabled selected>Tanlang...</option>
-                                <option value="ai">AI + IoT tizim</option>
-                                <option value="consultation">Konsultatsiya</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-primary btn-block">So'rov yuborish</button>
-                    </form>
-                </div>
+                <div class="contact-form-wrapper">
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="contactName">Ismingiz</label>
+            <input type="text" id="contactName" placeholder="Ismingizni kiriting" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contactPhone">Telefon raqamingiz</label>
+            <input type="tel" id="contactPhone" placeholder="+998 90 123 45 67" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contactService">Xizmat yoki mahsulot turi</label>
+            <select id="contactService" required>
+                <option value="" disabled selected>Xizmatni tanlang</option>
+                <option value="Tomchilatib sug'orish">Tomchilatib sug'orish</option>
+                <option value="Yomg'irlatib sug'orish">Yomg'irlatib sug'orish</option>
+                <option value="Nasos stansiyalari">Nasos stansiyalari</option>
+                <option value="Kalkulyator va loyihalash">Kalkulyator va loyihalash</option>
+                <option value="Boshqa xizmatlar">Boshqa xizmatlar</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-primary btn-block">Yuborish</button>
+    </form>
+</div>
             </div>
         </div>
     </section>
