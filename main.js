@@ -2,8 +2,8 @@ document.getElementById('contactForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Sahifa qayta yuklanishini to'xtatamiz
 
     // 1. Bot token va Chat ID larini kiriting
-    const BOT_TOKEN = 'BOT_TOKENINGIZNI_SHUYERGA_YOZING'; // masalan: 123456789:AAH...
-    const CHAT_ID = 'CHAT_IDINGIZNI_SHUYERGA_YOZING';     // masalan: -100123456789 yoki shaxsiy ID
+    const BOT_TOKEN = '8667051988:AAEcPNAYG2rEDp6IKyomGkVxE2Wmr8jeuok'; // masalan: 123456789:AAH...
+    const CHAT_ID = '7782825299';     // masalan: -100123456789 yoki shaxsiy ID
 
     // 2. Forma qiymatlarini olish
     const name = document.getElementById('contactName').value;
