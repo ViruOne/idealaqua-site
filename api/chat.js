@@ -3,10 +3,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY sozlanmagan' });
-  }
+  // To'g'ridan-to'g'ri to'g'ri ishlaydigan API kalitingizni shu yerga yozamiz
+  const apiKey = "AIzaSy..."; // Google AI Studio'dan olingan aniq kalitingiz
 
   const { contents, systemInstruction } = req.body;
 
