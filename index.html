@@ -490,22 +490,7 @@
                         <li><i class="fas fa-clock"></i> Shanba: 10:00 - 15:00</li>
                     </ul>
                 </div>
-                <div class="visitor-counter">
-                    Saytga tashrif buyurganlar soni: <span id="visits">...</span>
-                </div>
                 
-                <script>
-                    // Bu funksiya har gal sahifa ochilganda hisoblagichni bittaga oshiradi
-                    fetch('https://api.countapi.xyz/hit/idealaqua.uz/visits')
-                        .then(res => res.json())
-                        .then(res => {
-                            document.getElementById('visits').innerText = res.value;
-                        })
-                        .catch(err => {
-                            console.log("Hisoblagichda xatolik:", err);
-                            document.getElementById('visits').innerText = "1"; // Xatolik bo'lsa zaxira variant
-                        });
-                </script>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2024 IDEAL AQUA. Barcha huquqlar himoyalangan.</p>
