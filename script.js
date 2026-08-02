@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // ==================== AI CHAT WIDGET (GROQ API) ====================
+    // ==================== AI CHAT WIDGET (API) ====================
     const chatToggle = document.getElementById('chatToggle');
     const chatWidget = document.getElementById('chatWidget');
     const chatClose = document.querySelector('.chat-close');
@@ -347,7 +347,6 @@ document.addEventListener('DOMContentLoaded', function() {
         chatToggle.addEventListener('click', () => chatWidget.classList.toggle('active'));
         if (chatClose) chatClose.addEventListener('click', () => chatWidget.classList.remove('active'));
         
-        // Ekranga xabar qo'shish (har safar yangi element yaratiladi)
         function addMessage(text, type) {
             const messageDiv = document.createElement('div');
             const messageId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
@@ -361,7 +360,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return messageId;
         }
 
-        // Yuklanmoqda xabarini yangilash
         function updateMessage(id, text) {
             const el = document.getElementById(id);
             if (el) {
@@ -377,12 +375,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const userText = chatInput.value.trim();
             if (!userText) return;
 
-            // 1. Foydalanuvchi xabari
             addMessage(userText, 'user');
             contents.push({ role: 'user', parts: [{ text: userText }] });
             chatInput.value = '';
 
-            // 2. Yuklanmoqda xabari
             const loadingId = addMessage('Javob tayyorlanmoqda...', 'bot');
 
             try {
@@ -393,18 +389,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 const data = await response.json();
-
+                
+                let replyText = "";
                 if (data.candidates && data.candidates[0]) {
-                    const replyText = data.candidates[0].content.parts[0].text;
-                    updateMessage(loadingId, replyText);
-                    contents.push({ role: 'model', parts: [{ text: replyText }] });
+                    replyText = data.candidates[0].content.parts[0].text;
+                } else if (data.reply) {
+                    replyText = data.reply;
                 } else if (data.error) {
-                    updateMessage(loadingId, `Xatolik: ${data.error}`);
+                    replyText = `Xatolik: ${data.error}`;
                 } else {
-                    updateMessage(loadingId, 'Kutilmagan xatolik yuz berdi.');
+                    replyText = "Kechirasiz, serverdan noto'g'ri formatdagi javob keldi.";
                 }
+
+                updateMessage(loadingId, replyText);
+                contents.push({ role: 'model', parts: [{ text: replyText }] });
+
             } catch (error) {
-                updateMessage(loadingId, 'Server bilan aloqa uzildi.');
+                updateMessage(loadingId, "Kechirasiz, server bilan bog'lanishda xatolik yuz berdi.");
             }
         }
         
