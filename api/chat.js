@@ -7,8 +7,14 @@ export default async function handler(req, res) {
   const { contents, systemInstruction } = req.body;
 
   let messages = [];
+
+  // System instruction qiymati matn ekanligini tekshirib qo'shamiz
   if (systemInstruction) {
-    messages.push({ role: 'system', content: systemInstruction });
+    const sysText = typeof systemInstruction === 'string' 
+      ? systemInstruction 
+      : (systemInstruction.parts && systemInstruction.parts[0] ? systemInstruction.parts[0].text : String(systemInstruction));
+      
+    messages.push({ role: 'system', content: sysText });
   }
   
   if (contents && Array.isArray(contents)) {
