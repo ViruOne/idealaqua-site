@@ -1183,6 +1183,7 @@ footer {
 @media (max-width: 768px) {
     .menu-toggle { display: block; }
 
+    /* Navigatsiya menyusi mobil holatda */
     nav {
         position: fixed;
         top: 65px;
@@ -1203,7 +1204,20 @@ footer {
         gap: 18px;
     }
 
-    .header-actions .btn-primary { display: none; }
+    /* MOBIL EKRANDA BUYURTMA TUGMASI MOZLASHTIRILDI */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .header-actions .btn-primary {
+        display: inline-flex !important;
+        padding: 7px 14px;
+        font-size: 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+    }
 
     .hero {
         padding: 90px 0 40px;
@@ -1273,29 +1287,14 @@ footer {
 
 @media (max-width: 480px) {
     .logo-img { height: 35px; }
+    
+    /* Juda kichik ekranlarda ham tugma mos ko'rinishi uchun */
+    .header-actions .btn-primary {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
     .hero h1 { font-size: 1.5rem; }
     .hero p { font-size: 0.8rem; }
     .about-stats { grid-template-columns: 1fr; }
-}
-
-/* Kompyuter ekranida bu tugmani menyu ichida yashiramiz */
-.mobile-only-btn {
-    display: none;
-}
-
-/* Mobil ekranda (768px va undan kichik) ko'rsatamiz */
-@media (max-width: 768px) {
-    .header-actions .btn-primary {
-        display: inline-flex !important;
-        padding: 6px 12px;
-        font-size: 11px;
-        border-radius: 20px;
-    }
-}
-
-    .mobile-only-btn .btn-primary {
-        display: inline-block !important;
-        width: 100%;
-        padding: 12px 20px;
-    }
 }
