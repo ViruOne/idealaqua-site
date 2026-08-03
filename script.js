@@ -374,20 +374,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const userText = chatInput.value.trim();
             if (!userText) return;
 
+            // Foydalanuvchi xabarini ekranga chiqaramiz
             addMessage(userText, 'user');
             chatInput.value = '';
 
-            // Vaqtinchalik loading xabarini chiqaramiz
+            // Loading xabarini chiqaramiz va uning ID sini saqlaymiz
             const loadingId = addMessage('Javob tayyorlanmoqda...', 'bot');
 
-            // APIga yuborishdan oldin hozirgi xabarni vaqtincha nusxalab turamiz
-            const currentContents = [...contents, { role: 'user', parts: [{ text: userText }] }];
+            // Hozirgi xabarni tarixga qo'shamiz
+            contents.push({ role: 'user', parts: [{ text: userText }] });
 
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: currentContents, systemInstruction })
+                    body: JSON.stringify({ contents, systemInstruction })
                 });
 
                 const data = await response.json();
@@ -403,17 +404,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     replyText = "Kechirasiz, serverdan noto'g'ri formatdagi javob keldi.";
                 }
 
-                // Loading elementini o'chiramiz
+                // "Javob tayyorlanmoqda..." degan vaqtinchalik xabarni o'chiramiz
                 const loadingElement = document.getElementById(loadingId);
                 if (loadingElement) {
                     loadingElement.remove();
                 }
 
-                // AI javobini ekranga chiqaramiz
+                // AI javobini yangi alohida xabar sifatida ekranga chiqaramiz
                 addMessage(replyText, 'bot');
-
-                // Muvaffaqiyatli javobdan keyingina tarixni yangilaymiz
-                contents.push({ role: 'user', parts: [{ text: userText }] });
+                
+                // AI javobini ham tarixga qo'shamiz
                 contents.push({ role: 'model', parts: [{ text: replyText }] });
 
             } catch (error) {
@@ -422,6 +422,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     loadingElement.remove();
                 }
                 addMessage("Kechirasiz, server bilan bog'lanishda xatolik yuz berdi.", 'bot');
+                // Xatolik bo'lsa oxirgi foydalanuvchi xabarini tarixdan olib tashlaymiz
+                contents.pop();
             }
         }
         
