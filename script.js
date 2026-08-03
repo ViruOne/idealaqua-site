@@ -378,6 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
             contents.push({ role: 'user', parts: [{ text: userText }] });
             chatInput.value = '';
 
+            // Loading xabarini yaratamiz
             const loadingId = addMessage('Javob tayyorlanmoqda...', 'bot');
 
             try {
@@ -400,11 +401,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     replyText = "Kechirasiz, serverdan noto'g'ri formatdagi javob keldi.";
                 }
 
-                updateMessage(loadingId, replyText);
+                // "Javob tayyorlanmoqda..." xabarini butunlay o'chiramiz
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+
+                // AI javobini yangi alohida xabar sifatida qo'shamiz
+                addMessage(replyText, 'bot');
                 contents.push({ role: 'model', parts: [{ text: replyText }] });
 
             } catch (error) {
-                updateMessage(loadingId, "Kechirasiz, server bilan bog'lanishda xatolik yuz berdi.");
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+                addMessage("Kechirasiz, server bilan bog'lanishda xatolik yuz berdi.", 'bot');
             }
         }
         
