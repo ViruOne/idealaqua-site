@@ -375,17 +375,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!userText) return;
 
             addMessage(userText, 'user');
-            contents.push({ role: 'user', parts: [{ text: userText }] });
             chatInput.value = '';
 
-            // Loading xabarini yaratamiz
+            // Vaqtinchalik loading xabarini chiqaramiz
             const loadingId = addMessage('Javob tayyorlanmoqda...', 'bot');
+
+            // APIga yuborishdan oldin hozirgi xabarni vaqtincha nusxalab turamiz
+            const currentContents = [...contents, { role: 'user', parts: [{ text: userText }] }];
 
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents, systemInstruction })
+                    body: JSON.stringify({ contents: currentContents, systemInstruction })
                 });
 
                 const data = await response.json();
@@ -401,14 +403,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     replyText = "Kechirasiz, serverdan noto'g'ri formatdagi javob keldi.";
                 }
 
-                // "Javob tayyorlanmoqda..." xabarini butunlay o'chiramiz
+                // Loading elementini o'chiramiz
                 const loadingElement = document.getElementById(loadingId);
                 if (loadingElement) {
                     loadingElement.remove();
                 }
 
-                // AI javobini yangi alohida xabar sifatida qo'shamiz
+                // AI javobini ekranga chiqaramiz
                 addMessage(replyText, 'bot');
+
+                // Muvaffaqiyatli javobdan keyingina tarixni yangilaymiz
+                contents.push({ role: 'user', parts: [{ text: userText }] });
                 contents.push({ role: 'model', parts: [{ text: replyText }] });
 
             } catch (error) {
